@@ -2,11 +2,21 @@
 
     <SectionNavegacao v-if="!$route.params.id">
         <template v-slot:title>Inscritos</template>
+
     </SectionNavegacao>
 
     <CardForm>
 
-        <template v-slot:title>Inscritos: {{ eventos.length }}</template>
+        <template v-slot:title>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-start">
+                    Inscritos: {{ eventos.length }}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-end">
+                    <RouterLink :to="{ name: 'InscritoForm' }"><span class="btn btn-primary btn-round">Adicionar Inscrição</span></RouterLink>
+                </div>
+            </div>
+        </template>
         <template v-slot:body>
             <div class="table-responsive">
                 <table id="multi-filter-select" class="display table table-striped table-hover">
@@ -26,12 +36,12 @@
                         <tr v-for="(evento, index) in eventos" :key="index">
                             <td>{{ evento.title }}</td>
                             <td class="text-center">
-                                <a @click="redirect(evento.id)">
+                                <a @click="redirect(evento.id)" v-if="evento.id">
                                     <fa :icon="['fas', 'fa-edit']" size="xl" />
                                 </a>
                                 &nbsp;
-                                <a @click="redirect(evento.id)">
-                                    <fa :icon="['fas', 'times-circle']" size="xl" style="color: red"/>
+                                <a @click="redirect(evento.id)" v-if="evento.id">
+                                    <fa :icon="['fas', 'times-circle']" size="xl" style="color: red" />
                                 </a>
                             </td>
                         </tr>

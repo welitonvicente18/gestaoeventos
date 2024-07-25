@@ -15,12 +15,12 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
-import { faUserSecret, faUser, faEnvelope, faUserLock, faShareFromSquare, faLayerGroup, faHouse, faChevronRight, faEdit, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faUser, faEnvelope, faUserLock, faShareFromSquare, faLayerGroup, faHouse, faChevronRight, faEdit, faTimesCircle, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { faFontAwesome, faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faFileAlt, faCalendarAlt, faBookmark } from '@fortawesome/free-regular-svg-icons'
 
 /* add icons to the library */
-library.add(faUserSecret, faUser, faUserLock, faEnvelope, faFileAlt, faCalendarAlt, faBookmark, faFontAwesome, faGithub, faTwitter, faShareFromSquare, faLayerGroup, faHouse, faChevronRight, faEdit, faTimesCircle)
+library.add(faUserSecret, faUser, faUserLock, faEnvelope, faFileAlt, faCalendarAlt, faBookmark, faFontAwesome, faGithub, faTwitter, faShareFromSquare, faLayerGroup, faHouse, faChevronRight, faEdit, faTimesCircle, faPlus)
 
 createApp(App)
     .component('fa', FontAwesomeIcon)

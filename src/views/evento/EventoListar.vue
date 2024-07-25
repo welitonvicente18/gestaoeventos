@@ -6,7 +6,16 @@
 
     <CardForm>
 
-        <template v-slot:title>Meus Eventos</template>
+        <template v-slot:title>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-start">
+                    Meus Eventos: {{ eventos.length }}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-end">
+                    <router-link :to="{ name: 'eventoform' }"><span class="btn btn-primary btn-round">Adicionar Evento</span></router-link>
+                </div>
+            </div>
+        </template>
         <template v-slot:body>
             <div class="table-responsive">
                 <table id="multi-filter-select" class="display table table-striped table-hover">

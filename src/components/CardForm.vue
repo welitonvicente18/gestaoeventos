@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-header">
+        <div class="card-header titulo">
             <slot name="title"></slot>
         </div>
         <div class="card-body">
@@ -11,3 +11,18 @@
         </div>
     </div>
 </template>
+
+<style>
+    .titulo {
+       text-align: left; 
+       font-weight: bold;
+       font-size: 20px;
+       color: #1A2035;
+    }
+    .destaque {
+       text-align: center; 
+       font-weight: bold;
+       font-size: 20px;
+       color: #1A2035;
+    }
+</style>

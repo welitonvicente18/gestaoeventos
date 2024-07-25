@@ -1,46 +1,74 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-// import HomeView from '../views/HomeView.vue'
-import App from '../App.vue'
+import AppLayout from '../layout/AppLayout.vue'
+import Login from '../Login.vue'
+import Register from '../Register.vue'
 
 const routes = [
     {
+        path: '/login',
+        name: 'login',
+        component: Login
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: Register
+    },
+    {
         path: '/',
-        name: 'home',
-        component: App
-    },
-    {
-        path: '/evento/form',
-        name: 'eventoform',
-        component: () => import('@/views/evento/EventoForm.vue'),
-    },
-    {
-        path: '/evento/listar',
-        name: 'eventoListar',
-        component: () => import('@/views/evento/EventoListar.vue')
-    },
-    {
-        path: '/evento/detalhe/:id',
-        name: 'eventoDetalhe',
-        component: () => import('@/views/evento/EventoDetalhes.vue'),
+        component: AppLayout,
         children: [
             {
-                path: '/evento/form/:id',
-                name: 'eventoeditar',
+                path: '',
+                name: 'dashboard',
                 component: () => import('@/views/evento/EventoForm.vue'),
             },
             {
-                path: '/inscrito/listar/:id',
-                name: 'inscritoListarDetalhe',
-                component: () => import('@/views/inscrito/InscritoListar.vue')
-            }
+                path: 'evento/form',
+                name: 'eventoform',
+                component: () => import('@/views/evento/EventoForm.vue'),
+            },
+            {
+                path: 'evento/listar',
+                name: 'eventoListar',
+                component: () => import('@/views/evento/EventoListar.vue')
+            },
+            {
+                path: 'evento/detalhe/:id',
+                name: 'eventoDetalhe',
+                component: () => import('@/views/evento/EventoDetalhes.vue'),
+                children: [
+                    {
+                        path: 'evento/form/:id',
+                        name: 'eventoeditar',
+                        component: () => import('@/views/evento/EventoForm.vue'),
+                    },
+                    {
+                        path: 'inscrito/listar/:id',
+                        name: 'inscritoListarDetalhe',
+                        component: () => import('@/views/inscrito/InscritoListar.vue')
+                    },
+                    {
+                        path: 'inscrito/form',
+                        name: 'InscritoForm',
+                        component: () => import('@/views/inscrito/InscritoForm.vue')
+                    },
+
+                ]
+            },
+            {
+                path: 'usuario/listar',
+                name: 'usuarioListar',
+                component: () => import('@/views/usuario/UsuarioListar.vue'),
+            },
+            {
+                path: 'usuario/form',
+                name: 'usuarioForm',
+                component: () => import('@/views/usuario/UsuarioForm.vue'),
+            },
 
         ]
-    },
-    {
-        path: '/inscrito/listar',
-        name: 'inscritoListar',
-        component: () => import('@/views/inscrito/InscritoListar.vue')
-    },
+    }
 ]
 
 const router = createRouter({

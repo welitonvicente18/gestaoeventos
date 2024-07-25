@@ -51,7 +51,7 @@
                         <div class="collapse" id="evento">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <routerLink :to="{ name: 'eventoform' }"><span class="sub-item">Adicionar Eventos</span></routerLink>
+                                    <router-link :to="{ name: 'eventoform' }"><span class="sub-item">Adicionar Eventos</span></router-link>
                                 </li>
                                 <li>
                                     <routerLink :to="{ name: 'eventoListar' }"><span class="sub-item">Gerenciar Eventos</span></routerLink>
@@ -68,47 +68,10 @@
                         <div class="collapse" id="sidebarLayouts">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <routerLink :to="{ name: 'eventoform' }"><span class="sub-item">Adicionar Usuário</span></routerLink>
+                                    <routerLink :to="{ name: 'usuarioForm' }"><span class="sub-item">Adicionar Usuário</span></routerLink>
                                 </li>
                                 <li>
-                                    <routerLink :to="{ name: 'eventoListar' }"><span class="sub-item">Gerenciar Usuários</span></routerLink>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#forms">
-                            <fa :icon="['fas', 'layer-group']" />
-                            <p>&nbsp;Financeiro</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="forms">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="forms/forms.html">
-                                        <span class="sub-item">Basic Form</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#tables">
-                            <fa :icon="['fas', 'layer-group']" />
-                            <p>&nbsp;Agenda</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="tables">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="tables/tables.html">
-                                        <span class="sub-item">Basic Table</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="tables/datatables.html">
-                                        <span class="sub-item">Datatables</span>
-                                    </a>
+                                    <routerLink :to="{ name: 'usuarioListar' }"><span class="sub-item">Gerenciar Usuários</span></routerLink>
                                 </li>
                             </ul>
                         </div>

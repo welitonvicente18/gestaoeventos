@@ -575,3 +575,11 @@
         </div>
     </div>
 </template>
+
+
+<script>
+export default {
+    name: 'DashboardPage'
+    // Aqui você pode adicionar lógica adicional, como props, data, métodos, etc.
+};
+</script>

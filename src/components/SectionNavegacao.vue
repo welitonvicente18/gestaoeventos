@@ -6,7 +6,7 @@
             </h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <routerLink :to="{ name: 'home' }">
+                    <routerLink :to="{ name: 'dashboard' }">
                         <fa :icon="['fas', 'house']" />
                     </routerLink>
                 </li>

@@ -26,7 +26,7 @@
                                 Inscritos
                             </routerLink>
                         </li>
-                        <li class="nav-item submenu">
+                        <!-- <li class="nav-item submenu">
                             <routerLink :to="{ name: 'eventoform' }" class="nav-link">
                                 <i class="far fa-user"></i>
                                 Agenda
@@ -43,7 +43,7 @@
                                 <i class="far fa-envelope"></i>
                                 Lista de Tarefas
                             </routerLink>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
