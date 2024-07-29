@@ -14,7 +14,7 @@
                                                  style="width: 185px;" alt="logo">
                                             <h4 class="mt-1 mb-5 pb-1">Sistema de Gestão de Eventos</h4>
                                         </div>
-                                        <form @submit.prevent="handleSubmit">
+                                        <form @submit.prevent="submit">
                                             <div data-mdb-input-init class="form-outline mb-4">
                                                 <label class="form-label" for="form2Example11">Usuário</label>
                                                 <input type="email" id="form2Example11" class="form-control" placeholder="Digite seu usuário" />
@@ -75,7 +75,7 @@ export default {
         };
     },
     methods: {
-        handleSubmit() {
+        submit() {
             // Aqui você pode adicionar validações adicionais se necessário
             axios.post('http://localhost:3000/eventos', this.formData)
                 .then(response => {

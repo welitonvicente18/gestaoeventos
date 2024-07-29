@@ -11,73 +11,73 @@
         <template v-slot:title>Criar Evento</template>
         <template v-slot:body>
 
-            <form name="form" id="form" action="?" method="post">
+            <form @submit.prevent="submitForm">
                 <div class="row">
                     <div class="col-md-6 col-lg-6">
                         <div class="row form-group">
                             <div class=" col-lg-12 col-md-12">
                                 <label for="email2">Evento</label>
-                                <input type="text" class="form-control" id="evento" placeholder="Nome do evento" />
+                                <input type="text" name="nome_evento" v-model="formData.evento" class="form-control" id="evento" placeholder="Nome do evento" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class=" col-lg-4 col-md-4">
                                 <label for="data_inicio">Data de Início</label>
-                                <input type="datetime-local" class="form-control" id="data_inicio" name="data_inicio" placeholder="Data início" />
+                                <input type="datetime-local" class="form-control" id="data_inicio" name="data_inicio" v-model="formData.data_inicio" placeholder="Data início" />
                             </div>
                             <div class="col-lg-4 col-md-4">
                                 <label for="data_fim">Data de Fim</label>
-                                <input type="datetime-local" class="form-control" id="data_fim" name="data_fim" placeholder="Data FIm" />
+                                <input type="datetime-local" class="form-control" id="date_fim" name="data_fim" v-model="formData.data_fim" placeholder="Data FIm" />
                             </div>
                             <div class="col-lg-4 col-md-4">
                                 <label for="data_prazo_inscricao">Prazo de inscrição</label>
-                                <input type="datetime-local" class="form-control" id="data_prazo_inscricao" name="data_prazo_inscricao" placeholder="Prazo de Incrição" />
+                                <input type="datetime-local" class="form-control" id="data_prazo_inscricao" name="data_prazo_inscricao" v-model="formData.data_prazo_inscricao" placeholder="Prazo de Incrição" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12">
                                 <label for="responsavel">Responsável</label>
-                                <input type="text" class="form-control" id="responsavel" name="responsavel" placeholder="Nome Responsável" />
+                                <input type="text" class="form-control" id="responsavel" name="responsavel" v-model="formData.responsavel" placeholder="Nome Responsável" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-lg-4 col-md-12">
                                 <label for="telefone_responsavel">Telefone</label>
-                                <input type="text" class="form-control" id="telefone_responsavel" name="telefone_responsavel" placeholder="(00) 0000-0000" />
+                                <input type="text" class="form-control" id="telefone_responsavel" name="telefone_responsavel" v-model="formData.telefone_responsavel" placeholder="(00) 0000-0000" />
                             </div>
                             <div class="col-lg-8 col-md-12">
                                 <label for="email_responsavel">E-mail</label>
-                                <input type="text" class="form-control" id="email_responsavel" name="email_responsavel" placeholder="E-mail" />
+                                <input type="text" class="form-control" id="email_responsavel" name="email_responsavel" v-model="formData.email_responsavel" placeholder="E-mail" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-lg-3 col-md-4">
                                 <label for="uf">Estado</label>
-                                <select class="form-control">
+                                <select class="form-control" name="estado" v-model="formData.estado">
                                     <option></option>
                                 </select>
                             </div>
                             <div class="col-lg-6 col-md-4">
                                 <label for="cidade">Cidade</label>
-                                <input type="text" class="form-control" id="cidade" name="cidade" placeholder="Cidade" />
+                                <input type="text" class="form-control" id="cidade" name="cidade" v-model="formData.cidade" placeholder="Cidade" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12">
                                 <label for="local">Local</label>
-                                <input type="text" class="form-control" id="local" name="local" placeholder="Local" />
+                                <input type="text" class="form-control" id="local" name="local" v-model="formData.local" placeholder="Local" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class=" col-lg-12 col-md-12">
                                 <label for="descricao">Descrição do Evento:</label>
-                                <textarea class="form-control" name="descricao" id="descricao" rows="5"></textarea>
+                                <textarea class="form-control" name="descricao" v-model="formData.descricao" id="descricao" rows="5"></textarea>
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12">
                                 <label for="limiteInscritos">Limite de Inscritos</label>
-                                <input type="number" class="form-control" id="limiteInscritos" name="limite_nscritos" placeholder="Limite de Inscritos" />
+                                <input type="number" class="form-control" id="limiteInscritos" name="limite_nscritos" v-model="formData.limite_nscritos" placeholder="Limite de Inscritos" />
                             </div>
                         </div>
 
@@ -103,7 +103,7 @@
                                 <label for="basic-url">Link de Inscrição</label>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
-                                    <input type="text" name="url_inscricao" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                                    <input type="text" name="url_inscricao" v-model="formData.url_inscricao" class="form-control" id="basic-url" aria-describedby="basic-addon3">
                                 </div>
                             </div>
                         </div>
@@ -207,12 +207,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="row form-group">
+                    <hr>
+                </div>
+                <button type="submit" class="btn btn-success">Salvar</button>
             </form>
 
-        </template>
-
-        <template v-slot:footer>
-            <button class="btn btn-success">Salvar</button>
         </template>
 
     </CardForm>
@@ -223,14 +223,46 @@
 
 import CardForm from "@/components/CardForm.vue";
 import SectionNavegacao from '@/components/SectionNavegacao.vue';
+import axios from 'axios';
 
 export default {
     name: "EventoForm",
     components: {
         CardForm, SectionNavegacao
     },
-
+    data() {
+        return {
+            formData: {
+                nome_evento: '',
+                data_inicio: '',
+                date_fim: '',
+                data_prazo_inscricao: '',
+                responsavel: '',
+                telefone_responsavel: '',
+                email_responsavel: '',
+                uf: '',
+                cidade: '',
+                local: '',
+                descricao: '',
+                logo_evento: null,
+                limite_nscritos: '',
+                url_inscricao: '',
+                campos_adicionais: [],
+            }
+        };
+    },
     methods: {
+        submitForm() {
+            // console.table(this.formData)
+
+            axios.post('http://localhost:70/appgestaoevento/evento/store/', this.formData)
+                .then(response => {
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar dados:', error);
+                });
+        },
         addPergunta() {
             const new_campo = document.getElementById("new_campo");
 
