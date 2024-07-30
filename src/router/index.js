@@ -39,9 +39,9 @@ const routes = [
                 component: () => import('@/views/evento/EventoDetalhes.vue'),
                 children: [
                     {
-                        path: 'evento/form/:id',
+                        path: 'evento/edit/:id',
                         name: 'eventoeditar',
-                        component: () => import('@/views/evento/EventoForm.vue'),
+                        component: () => import('@/views/evento/EventoEdit.vue'),
                     },
                     {
                         path: 'inscrito/listar/:id',

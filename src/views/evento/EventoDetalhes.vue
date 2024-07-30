@@ -11,7 +11,7 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title" v-if="evento">{{ evento.title }}</h4>
+                    <h4 class="card-title" v-if="evento">{{ evento.nome_evento }}</h4>
                 </div>
                 <div class="card-body">
                     <ul class="nav nav-pills nav-secondary  nav-pills-no-bd nav-pills-icons justify-content-center" id="pills-tab-with-icon" role="tablist">
@@ -72,9 +72,10 @@ onMounted(() => {
 
     const id = router.currentRoute.value.params.id;
 
-    axios.get(`http://localhost:3000/eventos/${id}`)
+    axios.get(`http://localhost:70/appgestaoevento/evento/show/${id}`)
         .then(response => {
-            evento.value = response.data;
+            evento.value = response.data.data;
+            console.log(evento.value)
         })
         .catch(error => {
             console.log('Erro ao buscar detalhes do evento', error);

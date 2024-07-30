@@ -39,13 +39,16 @@
                     </tfoot>
                     <tbody>
                         <tr v-for="(evento, index) in eventos" :key="index">
-                            <td>{{ evento.title }}</td>
-                            <td>{{ evento.userId }}</td>
-                            <td>{{ evento.userId }}</td>
-                            <td>{{ evento.userId }}</td>
+                            <td>{{ evento.nome_evento }}</td>
+                            <td>{{ evento.data_inicio }}</td>
+                            <td>{{ evento.local }}</td>
+                            <td>{{ evento.responsavel }}</td>
                             <td>
                                 <a @click="redirect(evento.id)">
-                                    <fa :icon="['fas', 'share-square']" size="xl" />
+                                    <fa :icon="['fas', 'share-square']" size="xl" /> &nbsp;
+                                </a>
+                                <a @click="redirectDelete(evento.id)">
+                                    <fa :icon="['fas', 'circle-xmark']" size="xl" class="red" />
                                 </a>
                             </td>
                         </tr>
@@ -76,17 +79,19 @@
 </template>
 
 <script setup>
-import axios from 'axios';
 import { ref } from 'vue';
-import CardForm from "@/components/CardForm.vue";
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import CardForm from "@/components/CardForm.vue";
 import SectionNavegacao from '@/components/SectionNavegacao.vue';
 
 const eventos = ref([]);
 
-axios.get('http://localhost:3000/eventos')
+axios.get('http://localhost:70/appgestaoevento/evento/index')
     .then(response => {
-        eventos.value = response.data;
+        eventos.value = response.data.data;
+        console.log(response.data);
     })
     .catch(error => {
         console.error('Erro ao carregar eventos:', error);
@@ -98,4 +103,31 @@ const redirect = (eventId) => {
     router.push({ name: 'eventoDetalhe', params: { id: eventId } });
 };
 
+function redirectDelete(id) {
+
+    axios.delete(`http://localhost:70/appgestaoevento/evento/delete/${id}`)
+        .then(response => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: 'Excluído com sucesso!',
+            });
+            console.log(response.data);
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'error!',
+                text: 'Erro ao enviar os evento!',
+            });
+            console.log('Erro ao buscar detalhes do evento', error);
+        })
+
+}
+
 </script>
+<style>
+.red {
+    color: #ed6565;
+}
+</style>

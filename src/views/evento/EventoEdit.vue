@@ -17,7 +17,7 @@
                         <div class="row form-group">
                             <div class=" col-lg-12 col-md-12">
                                 <label for="email2">Evento</label>
-                                <input type="text" name="nome_evento" v-model="formData.evento" class="form-control" id="evento" placeholder="Nome do evento" />
+                                <input type="text" name="nome_evento" v-model="formData.nome_evento" class="form-control" id="evento" placeholder="Nome do evento" />
                             </div>
                         </div>
 
@@ -211,7 +211,7 @@
                 <div class="row form-group">
                     <hr>
                 </div>
-                <button type="submit" class="btn btn-success">Salvar</button>
+                <button type="submit" class="btn btn-success" @click="submitForm(formData)">Salvar</button>
             </form>
 
         </template>
@@ -220,164 +220,212 @@
 
 </template>
 
-<script>
+<script setup>
 
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import CardForm from "@/components/CardForm.vue";
 import SectionNavegacao from '@/components/SectionNavegacao.vue';
-import Swal from 'sweetalert2';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
-export default {
-    name: "EventoForm",
-    components: {
-        CardForm, SectionNavegacao
-    },
-    data() {
-        return {
-            formData: {
-                nome_evento: '',
-                data_inicio: '',
-                date_fim: '',
-                data_prazo_inscricao: '',
-                responsavel: '',
-                telefone_responsavel: '',
-                email_responsavel: '',
-                uf: '',
-                cidade: '',
-                local: '',
-                descricao: '',
-                logo_evento: null,
-                limite_nscritos: '',
-                url_inscricao: '',
-                campos_adicionais: [],
-            }
-        };
-    },
-    methods: {
-        submitForm() {
-            // console.table(this.formData)
+const formData = ref({
+    nome_evento: '',
+    data_inicio: '',
+    date_fim: '',
+    data_prazo_inscricao: '',
+    responsavel: '',
+    telefone_responsavel: '',
+    email_responsavel: '',
+    uf: '',
+    cidade: '',
+    local: '',
+    descricao: '',
+    logo_evento: '',
+    limite_nscritos: '',
+    url_inscricao: '',
+    campos_adicionais: [],
+});
 
-            axios.post('http://localhost:70/appgestaoevento/evento/store/', this.formData)
-                .then(response => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Sucesso!',
-                        text: 'Registrado com sucesso!',
-                    });
-                    console.log(response.data);
-                })
-                .catch(error => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'error!',
-                        text: 'Erro ao enviar os evento!',
-                    });
-                    console.error('Erro ao enviar dados:', error);
-                });
-        },
-        addPergunta() {
-            const new_campo = document.getElementById("new_campo");
+const isSubmitting = ref(false);
 
-            const clone = new_campo.cloneNode(true);
+function submitForm(formData) {
 
-            // clone.innerHTML = '';
+    if (isSubmitting.value) return;
 
-            const uniqueId = `${Date.now()}`;
-            clone.id = `new_campo-${uniqueId}`;
+    isSubmitting.value = true;
 
-            const containerCampo = clone.querySelector('#container-campo');
-            if (containerCampo) {
-                containerCampo.id = `container-campo-${uniqueId}`;
-            }
+    const update = {
+        id: formData.id,
+        nome_evento: formData.nome_evento,
+        data_inicio: formData.data_inicio,
+        date_fim: formData.date_fim,
+        data_prazo_inscricao: formData.data_prazo_inscricao,
+        responsavel: formData.responsavel,
+        telefone_responsavel: formData.telefone_responsavel,
+        email_responsavel: formData.email_responsavel,
+        uf: formData.uf,
+        cidade: formData.cidade,
+        local: formData.local,
+        descricao: formData.descricao,
+        logo_evento: formData.logo_evento,
+        limite_nscritos: formData.limite_nscritos,
+        url_inscricao: formData.url_inscricao,
+        campos_adicionais: formData.campos_adicionais,
+    };
 
-            document.getElementById("container-principal").appendChild(clone);
+    axios.post('http://localhost:70/appgestaoevento/evento/update/', update)
+        .then(response => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: 'Registro atualizado com sucesso!',
+            });
+            console.log(response.data);
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'error!',
+                text: 'Erro ao enviar os evento!',
+            });
+            console.error('Erro ao enviar dados:', error);
+        })
+        .finally(() => {
+            isSubmitting.value = false; // Reabilita o botão após a requisição
+        });
+}
 
-            const selectElement = clone.querySelector('select');
-            if (selectElement) {
-                selectElement.addEventListener('change', this.addTipoCampo.bind(this));
-            }
-        },
-        addTipoCampo(evt) {
+function addPergunta() {
+    const new_campo = document.getElementById("new_campo");
 
-            let idConteiner = evt.target.parentNode.parentNode.id.split('-')[1];
-            const selectedValue = evt.target.value;
+    const clone = new_campo.cloneNode(true);
 
-            let tipoCampo = '';
-            if (idConteiner === undefined) {
-                tipoCampo = document.getElementById('container-campo');
-                idConteiner = '';
-            } else {
-                // console.log('else');
-                tipoCampo = document.getElementById('container-campo-' + idConteiner);
-            }
+    // clone.innerHTML = '';
 
-            // Limpa o conteúdo anterior
-            tipoCampo.innerHTML = '';
+    const uniqueId = `${Date.now()}`;
+    clone.id = `new_campo-${uniqueId}`;
 
-            const label = document.createElement('label');
-            label.textContent = 'Campo';
-            tipoCampo.appendChild(label);
-
-            const newDiv = document.createElement('div');
-            newDiv.className = 'col-lg-12 col-md-12';
-            tipoCampo.appendChild(newDiv);
-
-            // Adiciona o novo campo com base na seleção
-            if (selectedValue == '1') {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.name = 'new_campo[]';
-                input.className = 'form-control ';
-                input.placeholder = 'Responder a pergunta';
-                input.disabled = true;
-                newDiv.appendChild(input);
-
-            } else if (selectedValue == '2' || selectedValue == '3') {
-
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.name = 'new_campo[]';
-                input.className = 'form-control ';
-                input.placeholder = 'Opção de resposta';
-                newDiv.appendChild(input);
-
-                const newDiv2 = document.createElement('div');
-                newDiv2.className = 'col-lg-12 col-md-12 mt-1 text-end';
-                if (idConteiner) {
-                    newDiv2.id = 'containeropcao-' + idConteiner;
-                } else {
-                    newDiv2.id = 'containeropcao';
-                }
-
-                const label2 = document.createElement('span');
-                label2.textContent = 'Novo';
-                label2.className = 'btn-sm btn-primary btn-round';
-                label2.addEventListener('click', this.addOpcao);
-
-                newDiv2.appendChild(label2);
-                tipoCampo.appendChild(newDiv2);
-
-            }
-        },
-        addOpcao(evt) {
-
-            const idConteiner = evt.target.parentElement.id.split('-')[1];
-
-            let tipoCampo2 = '';
-            if (idConteiner === undefined) {
-                tipoCampo2 = document.getElementById('container-campo');
-            } else {
-                tipoCampo2 = document.getElementById('container-campo-' + idConteiner);
-            }
-
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.name = 'new_campo[]';
-            input.className = 'form-control ';
-            input.placeholder = 'Opção de resposta';
-
-            tipoCampo2.appendChild(input);
-        }
+    const containerCampo = clone.querySelector('#container-campo');
+    if (containerCampo) {
+        containerCampo.id = `container-campo-${uniqueId}`;
     }
-};
+
+    document.getElementById("container-principal").appendChild(clone);
+
+    const selectElement = clone.querySelector('select');
+    if (selectElement) {
+        selectElement.addEventListener('change', this.addTipoCampo.bind(this));
+    }
+}
+
+function addTipoCampo(evt) {
+
+    let idConteiner = evt.target.parentNode.parentNode.id.split('-')[1];
+    const selectedValue = evt.target.value;
+
+    let tipoCampo = '';
+    if (idConteiner === undefined) {
+        tipoCampo = document.getElementById('container-campo');
+        idConteiner = '';
+    } else {
+        // console.log('else');
+        tipoCampo = document.getElementById('container-campo-' + idConteiner);
+    }
+
+    // Limpa o conteúdo anterior
+    tipoCampo.innerHTML = '';
+
+    const label = document.createElement('label');
+    label.textContent = 'Campo';
+    tipoCampo.appendChild(label);
+
+    const newDiv = document.createElement('div');
+    newDiv.className = 'col-lg-12 col-md-12';
+    tipoCampo.appendChild(newDiv);
+
+    // Adiciona o novo campo com base na seleção
+    if (selectedValue == '1') {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'new_campo[]';
+        input.className = 'form-control ';
+        input.placeholder = 'Responder a pergunta';
+        input.disabled = true;
+        newDiv.appendChild(input);
+
+    } else if (selectedValue == '2' || selectedValue == '3') {
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'new_campo[]';
+        input.className = 'form-control ';
+        input.placeholder = 'Opção de resposta';
+        newDiv.appendChild(input);
+
+        const newDiv2 = document.createElement('div');
+        newDiv2.className = 'col-lg-12 col-md-12 mt-1 text-end';
+        if (idConteiner) {
+            newDiv2.id = 'containeropcao-' + idConteiner;
+        } else {
+            newDiv2.id = 'containeropcao';
+        }
+
+        const label2 = document.createElement('span');
+        label2.textContent = 'Novo';
+        label2.className = 'btn-sm btn-primary btn-round';
+        label2.addEventListener('click', this.addOpcao);
+
+        newDiv2.appendChild(label2);
+        tipoCampo.appendChild(newDiv2);
+
+    }
+}
+
+// function addOpcao(evt) {
+
+//     const idConteiner = evt.target.parentElement.id.split('-')[1];
+
+//     let tipoCampo2 = '';
+//     if (idConteiner === undefined) {
+//         tipoCampo2 = document.getElementById('container-campo');
+//     } else {
+//         tipoCampo2 = document.getElementById('container-campo-' + idConteiner);
+//     }
+
+//     const input = document.createElement('input');
+//     input.type = 'text';
+//     input.name = 'new_campo[]';
+//     input.className = 'form-control ';
+//     input.placeholder = 'Opção de resposta';
+
+//     tipoCampo2.appendChild(input);
+// }
+
+onMounted(() => {
+
+    const router = useRouter();
+    const id = router.currentRoute.value.params.id;
+
+    axios.get(`http://localhost:70/appgestaoevento/evento/show/${id}`)
+        .then(response => {
+            const evento = response.data.data;
+            formData.value = {
+                ...formData.value,
+                ...evento
+            };
+            console.log('asdf');
+        })
+        .catch(error => {
+            console.log('Erro ao buscar detalhes do evento', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'error!',
+                text: 'Erro ao buscar detalhes do evento!',
+            });
+        })
+});
+
+
+
 </script>
