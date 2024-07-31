@@ -72,7 +72,7 @@ onMounted(() => {
 
     const id = router.currentRoute.value.params.id;
 
-    axios.get(`http://localhost:70/appgestaoevento/evento/show/${id}`)
+    axios.get(`evento/show/${id}`)
         .then(response => {
             evento.value = response.data.data;
             console.log(evento.value)

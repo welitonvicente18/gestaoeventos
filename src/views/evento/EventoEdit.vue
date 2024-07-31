@@ -274,7 +274,7 @@ function submitForm(formData) {
         campos_adicionais: formData.campos_adicionais,
     };
 
-    axios.post('http://localhost:70/appgestaoevento/evento/update/', update)
+    axios.put(`evento/update/${formData.id}`, update)
         .then(response => {
             Swal.fire({
                 icon: 'success',
@@ -407,7 +407,7 @@ onMounted(() => {
     const router = useRouter();
     const id = router.currentRoute.value.params.id;
 
-    axios.get(`http://localhost:70/appgestaoevento/evento/show/${id}`)
+    axios.get(`evento/show/${id}`)
         .then(response => {
             const evento = response.data.data;
             formData.value = {

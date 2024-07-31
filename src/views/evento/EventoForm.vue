@@ -255,9 +255,8 @@ export default {
     },
     methods: {
         submitForm() {
-            // console.table(this.formData)
 
-            axios.post('http://localhost:70/appgestaoevento/evento/store/', this.formData)
+            axios.post('evento/store/', this.formData)
                 .then(response => {
                     Swal.fire({
                         icon: 'success',

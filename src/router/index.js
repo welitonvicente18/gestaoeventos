@@ -53,6 +53,11 @@ const routes = [
                         name: 'InscritoForm',
                         component: () => import('@/views/inscrito/InscritoForm.vue')
                     },
+                    {
+                        path: 'inscrito/edit/:id',
+                        name: 'InscritoEdit',
+                        component: () => import('@/views/inscrito/InscritoEdit.vue')
+                    },
 
                 ]
             },

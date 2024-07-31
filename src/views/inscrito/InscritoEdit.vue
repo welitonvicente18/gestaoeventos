@@ -66,7 +66,7 @@
                 <div class="row form-group">
                     <hr>
                 </div>
-                <button type="submit" class="btn btn-success">Salvar</button>
+                <button type="submit" class="btn btn-success" @click="submitForm(formData)">Salvar</button>
             </form>
         </template>
     </CardForm>
@@ -75,17 +75,15 @@
 
 <script setup>
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import CardForm from "@/components/CardForm.vue";
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
-const router = useRouter();
-const id_eventos = router.currentRoute.value.params.id;
-
 const formData = ref({
-    id_eventos: id_eventos,
+    id: '',
+    nome: '',
     cpf: '',
     rg: '',
     data_nascimento: '',
@@ -97,9 +95,49 @@ const formData = ref({
     cep: '',
 });
 
+onMounted(() => {
+
+    const router = useRouter();
+    const id = router.currentRoute.value.params.id;
+
+    axios.get(`inscrito/show/${id}`)
+
+        .then(response => {
+            const inscritos = response.data.data;
+            formData.value = {
+                ...formData.value,
+                ...inscritos
+            };
+            console.log('asdf');
+        })
+        .catch(error => {
+            console.log('Erro ao buscar o inscritos', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'error!',
+                text: 'Erro ao buscar o inscrito!',
+            });
+        })
+});
+
+
 function submitForm() {
-    
-    axios.post('inscrito/store/', formData.value)
+
+    const update = {
+        id: formData.value.id,
+        nome: formData.value.nome,
+        cpf: formData.value.cpf,
+        rg: formData.value.rg,
+        data_nascimento: formData.value.data_nascimento,
+        telefone: formData.value.telefone,
+        email: formData.value.email,
+        uf: formData.value.uf,
+        cidade: formData.value.cidade,
+        endereco: formData.value.endereco,
+        cep: formData.value.cep,
+    };
+    console.log(update)
+    axios.put(`inscrito/update/${formData.value.id}`, update)
         .then(response => {
             Swal.fire({
                 icon: 'success',

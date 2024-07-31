@@ -47,7 +47,7 @@
                                 <a @click="redirect(evento.id)">
                                     <fa :icon="['fas', 'share-square']" size="xl" /> &nbsp;
                                 </a>
-                                <a @click="redirectDelete(evento.id)">
+                                <a @click="deleteFunction(evento.id)">
                                     <fa :icon="['fas', 'circle-xmark']" size="xl" class="red" />
                                 </a>
                             </td>
@@ -88,10 +88,10 @@ import SectionNavegacao from '@/components/SectionNavegacao.vue';
 
 const eventos = ref([]);
 
-axios.get('http://localhost:70/appgestaoevento/evento/index')
+axios.get('evento/index')
     .then(response => {
-        eventos.value = response.data.data;
         console.log(response.data);
+        eventos.value = response.data.data;
     })
     .catch(error => {
         console.error('Erro ao carregar eventos:', error);
@@ -103,9 +103,9 @@ const redirect = (eventId) => {
     router.push({ name: 'eventoDetalhe', params: { id: eventId } });
 };
 
-function redirectDelete(id) {
+function deleteFunction(id) {
 
-    axios.delete(`http://localhost:70/appgestaoevento/evento/delete/${id}`)
+    axios.delete(`evento/delete/${id}`)
         .then(response => {
             Swal.fire({
                 icon: 'success',
