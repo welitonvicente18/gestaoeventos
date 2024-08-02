@@ -1,13 +1,14 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import AppLayout from '../layout/AppLayout.vue'
-import Login from '../Login.vue'
+import LoginForm  from '../LoginForm .vue'
 import Register from '../Register.vue'
+import servicesMiddleware from '../router/services/middleware.js';
 
 const routes = [
     {
         path: '/login',
         name: 'login',
-        component: Login
+        component: LoginForm
     },
     {
         path: '/register',
@@ -17,6 +18,7 @@ const routes = [
     {
         path: '/',
         component: AppLayout,
+        beforeEnter: servicesMiddleware.auth,
         children: [
             {
                 path: '',
@@ -38,6 +40,11 @@ const routes = [
                 name: 'eventoDetalhe',
                 component: () => import('@/views/evento/EventoDetalhes.vue'),
                 children: [
+                    {
+                        path: 'evento/info/:id',
+                        name: 'EventoInfo',
+                        component: () => import('@/views/evento/EventoInfo.vue'),
+                    },
                     {
                         path: 'evento/edit/:id',
                         name: 'eventoeditar',

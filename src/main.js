@@ -4,10 +4,24 @@ import router from './router'
 import './plugins/axios.js';
 import axios from 'axios';
 import VueTheMask from 'vue-the-mask'
+import { plugin, defaultConfig } from '@formkit/vue'
+import '@formkit/themes/genesis'
+// import Cookies from 'js-cookie';
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api/';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.headers.common['Accept'] = 'application/json';
+
+// // Configuração global do axios para adicionar o token
+// axios.interceptors.request.use(config => {
+//     const token = Cookies.get('_myapp_token');
+//     if (token) {
+//         config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+// }, error => {
+//     return Promise.reject(error);
+// });
 
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
 // import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js';
@@ -38,4 +52,5 @@ createApp(App)
     .use(router)
     .use(VueSweetalert2)
     .use(VueTheMask)
+    .use(plugin, defaultConfig)
     .mount('#app')

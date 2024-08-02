@@ -22,27 +22,30 @@
                     <thead>
                         <tr>
                             <th>Evento</th>
-                            <th>Data</th>
-                            <th>Local</th>
-                            <th>Responsável</th>
                             <th>Ação</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>Evento</th>
-                            <th>Data</th>
-                            <th>Local</th>
-                            <th>Responsável</th>
                             <th>Ação</th>
                         </tr>
                     </tfoot>
                     <tbody>
                         <tr v-for="(evento, index) in eventos" :key="index">
-                            <td>{{ evento.nome_evento }}</td>
-                            <td>{{ evento.data_inicio }}</td>
-                            <td>{{ evento.local }}</td>
-                            <td>{{ evento.responsavel }}</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-lg-2 col-md-3 col-6">
+                                        <!-- <img v-if="evento" :src="evento.logo_evento" width="100px" height="100px" alt="avatar" /> -->
+                                    </div>
+                                    <div class="col-lg-10 col-md-9 col-6">
+                                        <h5 v-if="evento">{{ evento.nome_evento }}</h5>
+                                        <span v-if="evento"><b>Datas: </b>{{ evento.data_inicio }} - {{ evento.data_fim }} - {{ evento.data_prazo_inscricao }}</span><br>
+                                        <span v-if="evento"><b>Local: </b>{{ evento.local }}</span><br>
+                                        <span v-if="evento"><b>Responsável: </b>{{ evento.responsavel }}</span><br>
+                                    </div>
+                                </div>
+                            </td>
                             <td>
                                 <a @click="redirect(evento.id)">
                                     <fa :icon="['fas', 'share-square']" size="xl" /> &nbsp;
@@ -56,19 +59,20 @@
                 </table>
                 <nav aria-label="...">
                     <ul class="pagination">
-                        <li class="page-item disabled">
-                            <span class="page-link">Previous</span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item active">
-                            <span class="page-link">
-                                2
-                                <span class="sr-only">(current)</span>
-                            </span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
                         <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
+                            <a v-if="paginantion.first_page_url" class="page-link" href="#" @click.prevent="redirectPagination(paginantion.first_page_url)">Anterior</a>
+                        </li>
+                        <li v-for="(link) in paginantion.links" :key="link.label" class="page-item">
+                            <a v-if="link.label == '1'" class="page-link" href="#" @click.prevent="redirectPagination(link.url)">1</a>
+                            <a v-if="link.label == '2'" class="page-link" href="#" @click.prevent="redirectPagination(link.url)">2</a>
+                            <a v-if="link.label == '3'" class="page-link" href="#" @click.prevent="redirectPagination(link.url)">3</a>
+                            <a v-if="link.label == '4'" class="page-link" href="#" @click.prevent="redirectPagination(link.url)">4</a>
+                        </li>
+                        <li class="page-item">
+                            <a v-if="paginantion.last_page_url" class="page-link" href="#" @click.prevent="redirectPagination(paginantion.next_page_url)">Próximo</a>
+                        </li>
+                        <li class="">
+                            <span class="page-link"> Total: {{ paginantion.total }}</span>
                         </li>
                     </ul>
                 </nav>
@@ -87,11 +91,13 @@ import CardForm from "@/components/CardForm.vue";
 import SectionNavegacao from '@/components/SectionNavegacao.vue';
 
 const eventos = ref([]);
+const paginantion = ref([]);
 
 axios.get('evento/index')
     .then(response => {
         console.log(response.data);
-        eventos.value = response.data.data;
+        eventos.value = response.data.data.data;
+        paginantion.value = response.data.data;
     })
     .catch(error => {
         console.error('Erro ao carregar eventos:', error);
@@ -101,6 +107,10 @@ const router = useRouter();
 
 const redirect = (eventId) => {
     router.push({ name: 'eventoDetalhe', params: { id: eventId } });
+};
+
+const redirectPrevious = (paginantion) => {
+    console.log(paginantion);
 };
 
 function deleteFunction(id) {

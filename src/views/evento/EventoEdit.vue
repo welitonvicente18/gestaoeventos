@@ -16,68 +16,71 @@
                     <div class="col-md-6 col-lg-6">
                         <div class="row form-group">
                             <div class=" col-lg-12 col-md-12">
-                                <label for="email2">Evento</label>
-                                <input type="text" name="nome_evento" v-model="formData.nome_evento" class="form-control" id="evento" placeholder="Nome do evento" />
+                                <FormKit type="text" name="nome_evento" id="nome-evento" label="Nome do evento"
+                                         validation="required" v-model="formData.nome_evento" placeholder="Nome do evento" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class=" col-lg-4 col-md-4">
-                                <label for="data_inicio">Data de Início</label>
-                                <input type="datetime-local" class="form-control" id="data_inicio" name="data_inicio" v-model="formData.data_inicio" placeholder="Data início" />
+                                <FormKit type="date" name="data_inicio" id="data_inicio" label="Data de Início"
+                                         validation="required" v-model="formData.data_inicio" placeholder="Nome do evento" />
                             </div>
                             <div class="col-lg-4 col-md-4">
-                                <label for="data_fim">Data de Fim</label>
-                                <input type="datetime-local" class="form-control" id="date_fim" name="data_fim" v-model="formData.data_fim" placeholder="Data FIm" />
+                                <FormKit type="date" name="data_fim" id="data-fim" label="Data Fim"
+                                         validation="required" v-model="formData.data_fim" placeholder="Data Fim" />
                             </div>
                             <div class="col-lg-4 col-md-4">
-                                <label for="data_prazo_inscricao">Prazo de inscrição</label>
-                                <input type="datetime-local" class="form-control" id="data_prazo_inscricao" name="data_prazo_inscricao" v-model="formData.data_prazo_inscricao" placeholder="Prazo de Incrição" />
+                                <FormKit type="date" name="data_prazo_inscricao" id="data_prazo_inscricao" label="Prazo de inscrição"
+                                         validation="required" v-model="formData.data_prazo_inscricao" placeholder="Prazo de inscrição" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12">
-                                <label for="responsavel">Responsável</label>
-                                <input type="text" class="form-control" id="responsavel" name="responsavel" v-model="formData.responsavel" placeholder="Nome Responsável" />
+                                <FormKit type="text" name="responsavel" id="responsavel" label="Responsável"
+                                         validation="required|max:150" v-model="formData.responsavel" placeholder="Nome Responsável" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-lg-4 col-md-12">
-                                <label for="telefone_responsavel">Telefone</label>
-                                <input type="text" class="form-control" id="telefone_responsavel" name="telefone_responsavel" v-model="formData.telefone_responsavel" placeholder="(00) 0000-0000" />
+                                <FormKit type="text" name="telefone_responsavel" id="telefone_responsavel" label="Telefone" v-mask="'(##) ####-####'"
+                                         validation="required" v-model="formData.telefone_responsavel" placeholder="(00) 0000-0000" />
                             </div>
                             <div class="col-lg-8 col-md-12">
-                                <label for="email_responsavel">E-mail</label>
-                                <input type="text" class="form-control" id="email_responsavel" name="email_responsavel" v-model="formData.email_responsavel" placeholder="E-mail" />
+                                <FormKit type="email" name="email_responsavel" id="email_responsavel" label="E-mail"
+                                         validation="required|email|max:200" v-model="formData.email_responsavel" placeholder="E-mail" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-lg-3 col-md-4">
-                                <label for="uf">Estado</label>
-                                <select class="form-control" name="estado" v-model="formData.estado">
-                                    <option></option>
-                                </select>
+                                <SelectUfForm name="uf" v-model="formData.uf" />
+                                <p>UF selecionado: {{ formData.uf }}</p>
                             </div>
                             <div class="col-lg-6 col-md-4">
-                                <label for="cidade">Cidade</label>
-                                <input type="text" class="form-control" id="cidade" name="cidade" v-model="formData.cidade" placeholder="Cidade" />
+                                <FormKit type="text" name="cidade" id="email" label="Cidade"
+                                         validation="required|email|max:100" v-model="formData.cidade" placeholder="Cidade" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12">
-                                <label for="local">Local</label>
-                                <input type="text" class="form-control" id="local" name="local" v-model="formData.local" placeholder="Local" />
+                                <FormKit type="text" name="local" id="local" label="Local"
+                                         validation="required|max:100" v-model="formData.local" placeholder="Local" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class=" col-lg-12 col-md-12">
-                                <label for="descricao">Descrição do Evento:</label>
-                                <textarea class="form-control" name="descricao" v-model="formData.descricao" id="descricao" rows="5"></textarea>
+                                <FormKit type="textarea"
+                                         name="descricao"
+                                         label="Descrição do Evento"
+                                         v-model="formData.descricao"
+                                         :help="`${formData.descricao ? formData.descricao.length : 0} / 500`"
+                                         validation="length:0,500"
+                                         validation-visibility="live" />
                             </div>
                         </div>
                     </div>
@@ -85,32 +88,29 @@
                     <div class="col-md-6 col-lg-6">
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12">
-                                <label for="exampleFormControlFile1" class="mt-3 mb-3">Logo do Evento</label>
-                                <br>
-                                <input type="file" name="logo_evento" class="form-control-file" id="exampleFormControlFile1" />
+                                <FormKit type="file" name="logo_evento" label="Logo do Evento" accept=".jpg,.jpeg,.png" placeholder="Local" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12">
-                                <label for="limiteInscritos">Limite de Inscritos</label>
-                                <input type="number" class="form-control" id="limiteInscritos" name="limite_nscritos" v-model="formData.limite_nscritos" placeholder="Limite de Inscritos" />
+                                <FormKit type="number" name="limite_nscritos" id="limiteInscritos" label="Limite de Inscritos"
+                                         validation="required" v-model="formData.limite_nscritos" placeholder="Limite de Inscritos" />
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12">
-                                <label for="basic-url">Link de Inscrição</label>
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
-                                    <input type="text" name="url_inscricao" v-model="formData.url_inscricao" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                                    <FormKit type="text" name="url_inscricao" id="local" label="Link de Inscrição"
+                                             validation="required|max:150" v-model="formData.url_inscricao" placeholder="Link de Inscrição" />
                                 </div>
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12">
-                                Habilitar Campos do Formulário
+                                Habilitar Campos do Personalizados
                             </div>
                             <hr>
                         </div>
@@ -141,8 +141,8 @@
                                 <label class="form-check-label" for="email">E-mail</label>
                             </div>
                             <div class="col-lg-6 col-md-12 form-check form-switch">
-                                <input name="campo_estado" class="form-check-input" type="checkbox" role="switch" id="estado" checked>
                                 <label class="form-check-label" for="estado">Estado</label>
+                                <SelectUfForm name="estado" id="estado" />
                             </div>
                             <div class="col-lg-6 col-md-12 form-check form-switch">
                                 <input name="campo_cidade" class="form-check-input" type="checkbox" role="switch" id="cidade" checked>
@@ -173,8 +173,10 @@
                                 <div class="col-lg-4 col-md-4">
                                     <label for="">Obrigatório</label>
                                     <br>
-                                    <input type="radio" name="new_campo_obrigatorio[]" value="2" class="form-check-input" /> Sim
-                                    <input type="radio" name="new_campo_obrigatorio[]" value="1" class="form-check-input" /> Não
+                                    <input type="radio" name="new_campo_obrigatorio[]" value="2"
+                                           class="form-check-input" /> Sim
+                                    <input type="radio" name="new_campo_obrigatorio[]" value="1"
+                                           class="form-check-input" /> Não
                                 </div>
 
                                 <div class="clear"></div>
@@ -182,13 +184,15 @@
                                 <div class="col-lg-8 col-md-8">
                                     <label for="">Campo</label>
                                     <div class="col-lg-12 col-md-12" id="container-campo">
-                                        <input type="text" name="new_campo[]" class="form-control " placeholder="Responder a pergunta" disabled="">
+                                        <input type="text" name="new_campo[]" class="form-control "
+                                               placeholder="Responder a pergunta" disabled="">
                                     </div>
                                 </div>
 
                                 <div class="col-lg-4 col-md-4">
                                     <label for="">Tipo</label>
-                                    <select name="new_tipo[]" id="tipo" class="form-control form-select" @change="addTipoCampo($event)">
+                                    <select name="new_tipo[]" id="tipo" class="form-control form-select"
+                                            @change="addTipoCampo($event)">
                                         <option value="1">Texto</option>
                                         <option value="2">Múltipla escolha</option>
                                         <option value="3">Caixa de seleção</option>

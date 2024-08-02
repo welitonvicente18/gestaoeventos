@@ -16,13 +16,13 @@
                                         </div>
                                         <form @submit.prevent="submit">
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="form2Example11">Usuário</label>
-                                                <input type="email" id="form2Example11" class="form-control" placeholder="Digite seu usuário" />
+                                                <label class="form-label" for="email">Email</label>
+                                                <input type="email" name="email" v-model="email" id="email" class="form-control" placeholder="Digite seu e-mail" />
                                             </div>
 
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <label class="form-label" for="form2Example22">Senha</label>
-                                                <input type="password" id="form2Example22" class="form-control" />
+                                                <label class="form-label" for="passoword">Senha</label>
+                                                <input type="password" name="password" v-model="password" id="passoword" class="form-control" />
                                             </div>
 
                                             <div class="text-center pt-1 mb-5 pb-1">
@@ -39,7 +39,7 @@
                                             <div class="d-flex align-items-center justify-content-center pb-4">
                                                 <p class="mb-0 me-2">Não tenho uma conta?</p>
                                                 <routerLink :to="{ name: 'register' }">
-                                                    <button  class="btn btn-outline-danger">Nova Conta</button>
+                                                    <button class="btn btn-outline-danger">Nova Conta</button>
                                                 </routerLink>
                                             </div>
                                         </form>
@@ -61,32 +61,32 @@
 }
 </style>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+import Cookies from 'js-cookie'
 
+const email = ref('');
+const password = ref('');
+const router = useRouter();
+
+function submit() {
+    axios.post('/login', { email: email.value, password: password.value })
+        .then(response => {
+            Cookies.set('_myapp_token', response.data.data.original.access_token);
+            Cookies.set('_myapp_user_name', response.data.data.original.name);
+            Cookies.set('_myapp_user_email', response.data.data.original.email);
+
+            router.push({ name: 'dashboard' });
+        })
+        .catch(error => {
+            console.error('Erro ao enviar dados:', error);
+        });
+}
+</script>
+<script>
 export default {
-    name: 'UsuarioLogin',
-    data() {
-        return {
-            formData: {
-                username: '',
-                password: ''
-            }
-        };
-    },
-    methods: {
-        submit() {
-            // Aqui você pode adicionar validações adicionais se necessário
-            axios.post('http://localhost:3000/eventos', this.formData)
-                .then(response => {
-                    console.log(response.data);
-                    // Redirecionar ou mostrar mensagem de sucesso
-                })
-                .catch(error => {
-                    console.error('Erro ao enviar dados:', error);
-                    // Mostrar mensagem de erro para o usuário
-                });
-        }
-    }
-};
+    name: 'LoginForm'
+}
 </script>

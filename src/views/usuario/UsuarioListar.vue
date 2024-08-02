@@ -9,7 +9,7 @@
         <template v-slot:title>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-start">
-                    Usuários: {{ eventos.length }}
+                    Usuários: {{ usuarios.length }}
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-end">
                     <RouterLink :to="{ name: 'usuarioForm' }"><span class="btn btn-primary btn-round">Adicionar Inscrição</span></RouterLink>
@@ -32,8 +32,21 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        <tr v-for="(evento, index) in eventos" :key="index">
-                            <td>{{ evento.title }}</td>
+                        <tr v-for="(usuario, index) in usuarios" :key="index">
+                            <td>
+                                <div class="row">
+                                    <div class="col-lg-2 col-md-3 col-6">
+                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" width="80px" height="80px" alt="avatar" />
+                                    </div>
+
+                                    <div class="col-lg-10 col-md-9 col-6">
+                                        <span>{{ usuario.name }}</span><br>
+                                        <span><b>Telefone:</b> {{ usuario.telefone }}</span><br>
+                                        <span><b>E-mail:</b> {{ usuario.email }}</span><br>
+                                    </div>
+                                </div>
+
+                            </td>
                             <td class="text-center">
                                 <fa :icon="['fas', 'fa-edit']" size="xl" />
                                 &nbsp;
@@ -72,14 +85,20 @@ import { ref } from 'vue';
 import CardForm from "@/components/CardForm.vue";
 import SectionNavegacao from '@/components/SectionNavegacao.vue';
 
-const eventos = ref([]);
 
-axios.get('http://localhost:3000/eventos')
-    .then(response => {
-        eventos.value = response.data;
-    })
-    .catch(error => {
-        console.error('Erro ao carregar eventos:', error);
-    });
+const usuarios = ref([]);
+
+listaUsuario();
+function listaUsuario() {
+    axios.get('/usuario/index')
+        .then(response => {
+            usuarios.value = response.data.data;
+            listaUsuario();
+        })
+        .catch(error => {
+            console.error('Erro ao carregar usuarios:', error);
+            console.log(error)
+        });
+}
 
 </script>
