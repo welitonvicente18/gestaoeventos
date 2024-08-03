@@ -8,10 +8,10 @@
     </SectionNavegacao>
 
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-12">
+        <div class="col-lg-9 col-md-7 col-12">
             <RouterView />
         </div>
-        <div class="col-lg-4 col-md-4 col-12">
+        <div class="col-lg-3 col-md-5 col-12">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title" v-if="evento">{{ evento.nome_evento }}</h4>
@@ -42,6 +42,12 @@
                                 Inscritos
                             </routerLink>
                         </li>
+                        <li class="nav-item submenu">
+                            <a @click="deleteFunction(evento.id)" class="nav-link red">
+                                <fa :icon="['fas', 'circle-xmark']" size="xl" class="" />
+                                Deletar
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -53,6 +59,7 @@
 
 import SectionNavegacao from '@/components/SectionNavegacao.vue'
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 
@@ -72,4 +79,36 @@ onMounted(() => {
         })
 });
 
+
+function deleteFunction(id) {
+
+    axios.delete(`evento/delete/${id}`)
+        .then(response => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: 'Excluído com sucesso!',
+            });
+            console.log(response.data);
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'error!',
+                text: 'Erro ao enviar os evento!',
+            });
+            console.log('Erro ao buscar detalhes do evento', error);
+        })
+}
+
 </script>
+<style>
+.red {
+    background-color: #ed6565 !important;
+    color: #FFF !important;
+}
+
+.nav-item {
+    cursor: pointer;
+}
+</style>

@@ -15,22 +15,22 @@
                 <div class="row">
                     <div class="col-md-6 col-lg-6">
                         <div class="row form-group">
-                            <div class=" col-lg-12 col-md-12">
+                            <div class="col-lg-12 col-md-12">
                                 <FormKit type="text" name="nome_evento" id="nome-evento" label="Nome do evento"
                                          validation="required" v-model="formData.nome_evento" placeholder="Nome do evento" />
                             </div>
                         </div>
 
                         <div class="row form-group">
-                            <div class=" col-lg-4 col-md-4">
+                            <div class=" col-lg-6 col-md-6">
                                 <FormKit type="date" name="data_inicio" id="data_inicio" label="Data de Início"
                                          validation="required" v-model="formData.data_inicio" placeholder="Nome do evento" />
                             </div>
-                            <div class="col-lg-4 col-md-4">
+                            <div class="col-lg-6 col-md-6">
                                 <FormKit type="date" name="data_fim" id="data-fim" label="Data Fim"
                                          validation="required" v-model="formData.data_fim" placeholder="Data Fim" />
                             </div>
-                            <div class="col-lg-4 col-md-4">
+                            <div class="col-lg-6 col-md-6">
                                 <FormKit type="date" name="data_prazo_inscricao" id="data_prazo_inscricao" label="Prazo de inscrição"
                                          validation="required" v-model="formData.data_prazo_inscricao" placeholder="Prazo de inscrição" />
                             </div>
@@ -158,57 +158,59 @@
                             </div>
                         </div>
 
-                        <div class="row form-group">
-                            <div class="col-lg-12 col-md-12 destaque">
-                                <span>Habilitar Novos Campos</span>
-                            </div>
-                            <hr>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="row form-group">
+                        <div class="col-lg-12 col-md-12 destaque">
+                            <span>Habilitar Novos Campos</span>
                         </div>
-                        <div class="row" id="container-principal">
-                            <div class="row" id="new_campo">
-                                <div class="col-lg-8 col-md-8">
-                                    <label for="">Pergunta</label>
-                                    <input type="text" name="new_campo[]" class="form-control" value="" />
-                                </div>
-                                <div class="col-lg-4 col-md-4">
-                                    <label for="">Obrigatório</label>
-                                    <br>
-                                    <input type="radio" name="new_campo_obrigatorio[]" value="2"
-                                           class="form-check-input" /> Sim
-                                    <input type="radio" name="new_campo_obrigatorio[]" value="1"
-                                           class="form-check-input" /> Não
-                                </div>
-
-                                <div class="clear"></div>
-
-                                <div class="col-lg-8 col-md-8">
-                                    <label for="">Campo</label>
-                                    <div class="col-lg-12 col-md-12" id="container-campo">
-                                        <input type="text" name="new_campo[]" class="form-control "
-                                               placeholder="Responder a pergunta" disabled="">
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-md-4">
-                                    <label for="">Tipo</label>
-                                    <select name="new_tipo[]" id="tipo" class="form-control form-select"
-                                            @change="addTipoCampo($event)">
-                                        <option value="1">Texto</option>
-                                        <option value="2">Múltipla escolha</option>
-                                        <option value="3">Caixa de seleção</option>
-                                        <option value="4">Combo de seleção</option>
-                                    </select>
-                                </div>
-                                <hr class="m-1">
+                        <hr>
+                    </div>
+                    <div class="row" id="container-principal">
+                        <div class="row" id="new_campo">
+                            <div class="col-lg-8 col-md-8">
+                                <label for="">Pergunta</label>
+                                <input type="text" name="new_campo[]" class="form-control" value="" />
                             </div>
+                            <div class="col-lg-4 col-md-4">
+                                <label for="">Obrigatório</label>
+                                <br>
+                                <input type="radio" name="new_campo[]" value="2"
+                                       class="form-check-input" /> Sim
+                                <input type="radio" name="new_campo[]" value="1"
+                                       class="form-check-input" /> Não
+                            </div>
+
+                            <div class="clear"></div>
+
+                            <div class="col-lg-8 col-md-8">
+                                <label for="">Campo</label>
+                                <div class="col-lg-12 col-md-12" id="container-campo">
+                                    <input type="text" name="new_campo[]" class="form-control "
+                                           placeholder="Responder a pergunta" disabled="">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-4">
+                                <label for="">Tipo</label>
+                                <select name="new_campo[]" id="tipo" class="form-control form-select"
+                                        @change="addTipoCampo($event)">
+                                    <option value="1">Texto</option>
+                                    <option value="2">Múltipla escolha</option>
+                                    <option value="3">Caixa de seleção</option>
+                                    <option value="4">Combo de seleção</option>
+                                </select>
+                            </div>
+                            <hr class="m-1">
                         </div>
+                    </div>
 
-                        <div class="row col-lg-12 col-md-12">
-                            <div class="col-lg-9 col-md-9 text-start">
-                            </div>
-                            <div class=" col-lg-3 col-md-3 text-start">
-                                <span class="btn-sm btn-success btn-round" @click="addPergunta()">Novo</span>
-                            </div>
+                    <div class="row col-lg-12 col-md-12">
+                        <div class="col-lg-9 col-md-9 text-start">
+                        </div>
+                        <div class=" col-lg-3 col-md-3 text-start">
+                            <span class="btn-sm btn-success btn-round" @click="addPergunta()">Novo</span>
                         </div>
                     </div>
                 </div>
@@ -248,13 +250,13 @@ const formData = ref({
     logo_evento: '',
     limite_nscritos: '',
     url_inscricao: '',
-    campos_adicionais: [],
+    new_campo: [],
 });
 
 const isSubmitting = ref(false);
 
 function submitForm(formData) {
-
+console.log(formData)
     if (isSubmitting.value) return;
 
     isSubmitting.value = true;

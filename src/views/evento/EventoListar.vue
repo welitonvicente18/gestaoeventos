@@ -25,22 +25,19 @@
                             <th>Ação</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Evento</th>
-                            <th>Ação</th>
-                        </tr>
-                    </tfoot>
                     <tbody>
                         <tr v-for="(evento, index) in eventos" :key="index">
                             <td>
                                 <div class="row">
-                                    <div class="col-lg-2 col-md-3 col-6">
-                                        <!-- <img v-if="evento" :src="evento.logo_evento" width="100px" height="100px" alt="avatar" /> -->
+                                    <div class="col-lg-2 col-md-3 col-6 align-items-center vertical-align">
+                                        <img v-if="evento.logo_evento != ''" :src="evento.logo_evento" width="100px" height="120px" alt="Logo do Evento" />
+                                        <!-- <img v-if="!evento" :src="evento.logo_evento" width="100px" height="100px" alt="avatar" /> -->
                                     </div>
                                     <div class="col-lg-10 col-md-9 col-6">
                                         <h5 v-if="evento">{{ evento.nome_evento }}</h5>
-                                        <span v-if="evento"><b>Datas: </b>{{ evento.data_inicio }} - {{ evento.data_fim }} - {{ evento.data_prazo_inscricao }}</span><br>
+                                        <span v-if="evento"><b>Data Início: </b> {{ formatDate(evento.data_inicio) }}</span><br>
+                                        <span v-if="evento"><b>Data Fim: </b> {{ formatDate(evento.data_fim) }}</span><br>
+                                        <span v-if="evento"><b>Prazo de Inscrição: </b>{{ formatDate(evento.data_prazo_inscricao) }}</span><br>
                                         <span v-if="evento"><b>Local: </b>{{ evento.local }}</span><br>
                                         <span v-if="evento"><b>Responsável: </b>{{ evento.responsavel }}</span><br>
                                     </div>
@@ -48,10 +45,7 @@
                             </td>
                             <td>
                                 <a @click="redirect(evento.id)">
-                                    <fa :icon="['fas', 'share-square']" size="xl" /> &nbsp;
-                                </a>
-                                <a @click="deleteFunction(evento.id)">
-                                    <fa :icon="['fas', 'circle-xmark']" size="xl" class="red" />
+                                    <fa :icon="['fas', 'share-square']" size="xl" />
                                 </a>
                             </td>
                         </tr>
@@ -63,16 +57,13 @@
                             <a v-if="paginantion.first_page_url" class="page-link" href="#" @click.prevent="redirectPagination(paginantion.first_page_url)">Anterior</a>
                         </li>
                         <li v-for="(link) in paginantion.links" :key="link.label" class="page-item">
-                            <a v-if="link.label == '1'" class="page-link" href="#" @click.prevent="redirectPagination(link.url)">1</a>
-                            <a v-if="link.label == '2'" class="page-link" href="#" @click.prevent="redirectPagination(link.url)">2</a>
-                            <a v-if="link.label == '3'" class="page-link" href="#" @click.prevent="redirectPagination(link.url)">3</a>
-                            <a v-if="link.label == '4'" class="page-link" href="#" @click.prevent="redirectPagination(link.url)">4</a>
+                            <a v-if="link.label == '1'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">1</a>
+                            <a v-if="link.label == '2'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">2</a>
+                            <a v-if="link.label == '3'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">3</a>
+                            <a v-if="link.label == '4'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">4</a>
                         </li>
                         <li class="page-item">
                             <a v-if="paginantion.last_page_url" class="page-link" href="#" @click.prevent="redirectPagination(paginantion.next_page_url)">Próximo</a>
-                        </li>
-                        <li class="">
-                            <span class="page-link"> Total: {{ paginantion.total }}</span>
                         </li>
                     </ul>
                 </nav>
@@ -83,61 +74,47 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import CardForm from "@/components/CardForm.vue";
 import SectionNavegacao from '@/components/SectionNavegacao.vue';
+import { format } from "date-fns";
+
 
 const eventos = ref([]);
 const paginantion = ref([]);
-
-axios.get('evento/index')
-    .then(response => {
-        console.log(response.data);
-        eventos.value = response.data.data.data;
-        paginantion.value = response.data.data;
-    })
-    .catch(error => {
-        console.error('Erro ao carregar eventos:', error);
-    });
-
 const router = useRouter();
 
 const redirect = (eventId) => {
     router.push({ name: 'eventoDetalhe', params: { id: eventId } });
 };
 
-const redirectPrevious = (paginantion) => {
-    console.log(paginantion);
+onMounted(() => {
+    redirectPagination('');
+});
+
+const formatDate = (date) => {
+    if (!date) return "";
+    return format(new Date(date), "dd-MM-yyyy");
 };
 
-function deleteFunction(id) {
+function redirectPagination(url) {
+    if (url == null || url.trim() === '') {
+        url = '/evento/index';
+    } else {
+        url = url.slice(-20);
+    }
 
-    axios.delete(`evento/delete/${id}`)
+    axios.get(url)
         .then(response => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Sucesso!',
-                text: 'Excluído com sucesso!',
-            });
-            console.log(response.data);
+            console.log(response.data.data);
+            eventos.value = response.data.data.data;
+            paginantion.value = response.data.data;
         })
         .catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'error!',
-                text: 'Erro ao enviar os evento!',
-            });
-            console.log('Erro ao buscar detalhes do evento', error);
-        })
-
+            console.error('Erro ao carregar eventos:', error);
+        });
 }
 
 </script>
-<style>
-.red {
-    color: #ed6565;
-}
-</style>
