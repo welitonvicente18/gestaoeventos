@@ -2,38 +2,20 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import './plugins/axios.js';
-import axios from 'axios';
 import VueTheMask from 'vue-the-mask'
 import { plugin, defaultConfig } from '@formkit/vue'
 import '@formkit/themes/genesis'
-// import Cookies from 'js-cookie';
-
-axios.defaults.baseURL = 'http://127.0.0.1:8000/api/';
-axios.defaults.headers.common['Content-Type'] = 'application/json';
-axios.defaults.headers.common['Accept'] = 'application/json';
-
-// // Configuração global do axios para adicionar o token
-// axios.interceptors.request.use(config => {
-//     const token = Cookies.get('_myapp_token');
-//     if (token) {
-//         config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-// }, error => {
-//     return Promise.reject(error);
-// });
-
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
-// import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js';
 import 'bootstrap';
 import '@/assets/css/kaiadmin.min.css';
+import '../public/css/estilos-personalizados.css';
+import '../src/router/services/axiosConfig.js';
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
 
 /* import specific icons */
 import { faUserSecret, faUser, faEnvelope, faUserLock, faShareFromSquare, faLayerGroup, faHouse, faChevronRight, faEdit, faTimesCircle, faPlus, faCircleXmark } from '@fortawesome/free-solid-svg-icons'

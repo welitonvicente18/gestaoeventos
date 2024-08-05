@@ -25,12 +25,6 @@
                             <th class="text-center">Ação</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Evento</th>
-                            <th class="text-center">Ação</th>
-                        </tr>
-                    </tfoot>
                     <tbody>
                         <tr v-for="(inscrito, index) in inscritos" :key="index">
                             <td>
@@ -62,19 +56,17 @@
                 </table>
                 <nav aria-label="...">
                     <ul class="pagination">
-                        <li class="page-item disabled">
-                            <span class="page-link">Previous</span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item active">
-                            <span class="page-link">
-                                2
-                                <span class="sr-only">(current)</span>
-                            </span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
                         <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
+                            <a v-if="paginantion.first_page_url" class="page-link" href="#" @click.prevent="redirectPagination(paginantion.first_page_url)">Anterior</a>
+                        </li>
+                        <li v-for="(link) in paginantion.links" :key="link.label" class="page-item">
+                            <a v-if="link.label == '1'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">1</a>
+                            <a v-if="link.label == '2'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">2</a>
+                            <a v-if="link.label == '3'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">3</a>
+                            <a v-if="link.label == '4'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">4</a>
+                        </li>
+                        <li class="page-item">
+                            <a v-if="paginantion.last_page_url" class="page-link" href="#" @click.prevent="redirectPagination(paginantion.next_page_url)">Próximo</a>
                         </li>
                     </ul>
                 </nav>
@@ -86,23 +78,35 @@
 
 <script setup>
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import CardForm from "@/components/CardForm.vue";
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import SectionNavegacao from '@/components/SectionNavegacao.vue';
 
 const inscritos = ref([]);
+const paginantion = ref([]);
 
-listaInscritos();
-function listaInscritos() {
+onMounted(() => {
+    redirectPagination();
+});
 
-    axios.get('inscrito/index')
+function redirectPagination(url = '') {
+
+    if (url == null || url.trim() === '') {
+        url = '/inscrito/index';
+    } else {
+        url = url.slice(-21);
+    }
+
+    axios.get(url)
         .then(response => {
-            inscritos.value = response.data.data;
+            inscritos.value = response.data.data.data;
+            paginantion.value = response.data.data;
+            console.log(paginantion)
         })
         .catch(error => {
-            console.error('Erro ao carregar eventos:', error);
+            console.error('Erro ao carregar os inscritos:', error);
         });
 
 }
@@ -121,7 +125,7 @@ function deleteFunction(id) {
                 title: 'Sucesso!',
                 text: 'Excluído com sucesso!',
             });
-            listaInscritos();
+            redirectPagination('');
             console.log(response.data);
         })
         .catch(error => {

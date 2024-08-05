@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import AppLayout from '../layout/AppLayout.vue'
 import LoginForm  from '../LoginForm .vue'
-import Register from '../Register.vue'
+import RegisterUser from '../RegisterUser.vue'
 import servicesMiddleware from '../router/services/middleware.js';
 
 const routes = [
@@ -13,7 +13,7 @@ const routes = [
     {
         path: '/register',
         name: 'register',
-        component: Register
+        component: RegisterUser
     },
     {
         path: '/',
@@ -77,6 +77,11 @@ const routes = [
                 path: 'usuario/form',
                 name: 'usuarioForm',
                 component: () => import('@/views/usuario/UsuarioForm.vue'),
+            },
+            {
+                path: 'usuario/edit/:id',
+                name: 'usuarioEdit',
+                component: () => import('@/views/usuario/UsuarioEdit.vue'),
             },
 
         ]

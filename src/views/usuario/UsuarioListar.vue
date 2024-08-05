@@ -25,12 +25,6 @@
                             <th class="text-center">Ação</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Evento</th>
-                            <th class="text-center">Ação</th>
-                        </tr>
-                    </tfoot>
                     <tbody>
                         <tr v-for="(usuario, index) in usuarios" :key="index">
                             <td>
@@ -41,6 +35,7 @@
 
                                     <div class="col-lg-10 col-md-9 col-6">
                                         <span>{{ usuario.name }}</span><br>
+                                        <span><b>Perfil:</b> {{ usuario.perfil == '2' ? 'Usuário do Sistema' : 'Administrador' }}</span><br>
                                         <span><b>Telefone:</b> {{ usuario.telefone }}</span><br>
                                         <span><b>E-mail:</b> {{ usuario.email }}</span><br>
                                     </div>
@@ -48,28 +43,30 @@
 
                             </td>
                             <td class="text-center">
-                                <fa :icon="['fas', 'fa-edit']" size="xl" />
+                                <a @click="redirectEdit(usuario.id)" v-if="usuario.id">
+                                    <fa :icon="['fas', 'fa-edit']" size="xl" />
+                                </a>
                                 &nbsp;
-                                <fa :icon="['fas', 'times-circle']" size="xl" style="color: red" />
+                                <a @click="deleteFunction(usuario.id)" v-if="usuario.id">
+                                    <fa :icon="['fas', 'times-circle']" size="xl" style="color: red" />
+                                </a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <nav aria-label="...">
                     <ul class="pagination">
-                        <li class="page-item disabled">
-                            <span class="page-link">Previous</span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item active">
-                            <span class="page-link">
-                                2
-                                <span class="sr-only">(current)</span>
-                            </span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
                         <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
+                            <a v-if="paginantion.first_page_url" class="page-link" href="#" @click.prevent="redirectPagination(paginantion.first_page_url)">Anterior</a>
+                        </li>
+                        <li v-for="(link) in paginantion.links" :key="link.label" class="page-item">
+                            <a v-if="link.label == '1'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">1</a>
+                            <a v-if="link.label == '2'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">2</a>
+                            <a v-if="link.label == '3'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">3</a>
+                            <a v-if="link.label == '4'" :class="link.active ? 'page-link active' : 'page-link'" href="#" @click.prevent="redirectPagination(link.url)">4</a>
+                        </li>
+                        <li class="page-item">
+                            <a v-if="paginantion.last_page_url" class="page-link" href="#" @click.prevent="redirectPagination(paginantion.next_page_url)">Próximo</a>
                         </li>
                     </ul>
                 </nav>
@@ -81,19 +78,31 @@
 
 <script setup>
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import CardForm from "@/components/CardForm.vue";
 import SectionNavegacao from '@/components/SectionNavegacao.vue';
 
-
+const router = useRouter();
 const usuarios = ref([]);
+const paginantion = ref([]);
 
-listaUsuario();
-function listaUsuario() {
-    axios.get('/usuario/index')
+onMounted(() => {
+    redirectPagination();
+});
+
+function redirectPagination(url) {
+    if (url == null || url.trim() === '') {
+        url = '/usuario/index';
+    } else {
+        url = url.slice(-21);
+    }
+
+    axios.get(url)
         .then(response => {
-            usuarios.value = response.data.data;
-            listaUsuario();
+            usuarios.value = response.data.data.data;
+            paginantion.value = response.data.data;
+            redirectPagination();
         })
         .catch(error => {
             console.error('Erro ao carregar usuarios:', error);
@@ -101,4 +110,7 @@ function listaUsuario() {
         });
 }
 
+const redirectEdit = (id) => {
+    router.push({ name: 'usuarioEdit', params: { id: id } });
+};
 </script>

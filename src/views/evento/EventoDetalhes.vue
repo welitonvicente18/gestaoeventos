@@ -58,10 +58,10 @@
 <script setup>
 
 import SectionNavegacao from '@/components/SectionNavegacao.vue'
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
+import axios from '../../router/services/axiosConfig.js';
 
 const router = useRouter();
 const evento = ref(null);
@@ -82,7 +82,7 @@ onMounted(() => {
 
 function deleteFunction(id) {
 
-    axios.delete(`evento/delete/${id}`)
+    axios.delete(`evento/destroy/${id}`)
         .then(response => {
             Swal.fire({
                 icon: 'success',

@@ -12,7 +12,7 @@
                      type="form"
                      :config="{ validationVisibility: 'submit' }"
                      @submit="submitForm"
-                     submit-label="Salvar Usuário">
+                     submit-label="Atualizar Usuário">
 
                 <div class="row">
                     <div class="col-md-12 col-lg-12">
@@ -45,11 +45,11 @@
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6">
                                 <FormKit type="password" name="password" v-model="formData.password" label="Senha"
-                                         validation="required" validation-visibility="live" />
+                                         validation="" validation-visibility="live" />
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <FormKit type="password" name="password_confirm" v-model="formData.password_confirmation" label="Confirmar Senha"
-                                         validation="required|confirm" validation-visibility="live" validation-label="Confirmar Senha" />
+                                         validation="confirm" validation-visibility="live" validation-label="Confirmar Senha" />
                             </div>
                         </div>
                     </div>
@@ -64,23 +64,58 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import CardForm from "@/components/CardForm.vue";
 import SectionNavegacao from '@/components/SectionNavegacao.vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
 const formData = ref({
+    id: '',
     name: '',
     email: '',
+    perfil: '',
     telefone: '',
     password: '',
     password_confirmation: '',
 });
 
+onMounted(() => {
+
+    const router = useRouter();
+    const id = router.currentRoute.value.params.id;
+
+    axios.get(`/usuario/show/${id}`)
+        .then(function (response) {
+            const usuario = response.data.data;
+            formData.value = {
+                id: usuario.id,
+                name: usuario.name,
+                email: usuario.email,
+                perfil: usuario.perfil,
+                telefone: usuario.telefone,
+            };
+            console.log(response);
+        })
+        .catch(function (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'error!',
+                text: 'Erro ao buscar o cadastrar!',
+            });
+            console.log(error);
+        });
+});
+
 function submitForm() {
 
-    axios.post('/register', formData.value)
+    const update = {
+        ...formData.value
+    };
+
+    console.log(update)
+    axios.put(`usuario/update/${formData.value.id}`, update)
         .then(function (response) {
             Swal.fire({
                 icon: 'success',
