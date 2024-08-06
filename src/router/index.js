@@ -1,7 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import AppLayout from '../layout/AppLayout.vue'
-import LoginForm  from '../LoginForm .vue'
+import LoginForm from '../LoginForm .vue'
 import RegisterUser from '../RegisterUser.vue'
+import CadastroExterno from '../CadastroExterno.vue'
 import servicesMiddleware from '../router/services/middleware.js';
 
 const routes = [
@@ -16,14 +17,19 @@ const routes = [
         component: RegisterUser
     },
     {
+        path: '/cadastroexterno/:id',
+        name: 'casdastroExterno',
+        component: CadastroExterno
+    },
+    {
         path: '/',
         component: AppLayout,
         beforeEnter: servicesMiddleware.auth,
         children: [
             {
-                path: '',
+                path: '/dashboard',
                 name: 'dashboard',
-                component: () => import('@/views/evento/EventoForm.vue'),
+                component: () => import('@/views/DashboardApp.vue'),
             },
             {
                 path: 'evento/form',

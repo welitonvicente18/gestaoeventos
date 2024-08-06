@@ -22,12 +22,15 @@
     "bootstrap": "^5.3.3",
     "core-js": "^3.8.3",
     "date-fns": "^3.6.0",
+    "html2pdf": "^0.0.11",
+    "html2pdf.js": "^0.10.2",
     "json-server": "^1.0.0-beta.1",
     "sweetalert2": "^11.12.3",
     "vue": "^3.2.13",
     "vue-router": "^4.4.0",
     "vue-sweetalert2": "^5.0.11",
-    "vue-the-mask": "^0.11.1"
+    "vue-the-mask": "^0.11.1",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

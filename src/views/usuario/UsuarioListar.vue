@@ -79,11 +79,11 @@
 <script setup>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 import CardForm from "@/components/CardForm.vue";
 import SectionNavegacao from '@/components/SectionNavegacao.vue';
 
-const router = useRouter();
+// const router = useRouter();
 const usuarios = ref([]);
 const paginantion = ref([]);
 
@@ -110,7 +110,7 @@ function redirectPagination(url) {
         });
 }
 
-const redirectEdit = (id) => {
-    router.push({ name: 'usuarioEdit', params: { id: id } });
+const redirectEdit = () => {
+    // router.push({ name: 'usuarioEdit', params: { id: id } });
 };
 </script>

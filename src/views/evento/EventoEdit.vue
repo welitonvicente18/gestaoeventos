@@ -91,7 +91,7 @@
                     <div class="col-md-6 col-lg-6">
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12">
-                                <FormKit type="file" name="logo_evento" label="Logo do Evento" accept=".jpg,.jpeg,.png" placeholder="Local" />
+                                <FormKit type="file" name="logo_evento"  v-model="formData.logo_evento" label="Logo do Evento" accept=".jpg,.jpeg,.png" placeholder="Local" />
                             </div>
                         </div>
 
@@ -100,13 +100,6 @@
                                 <FormKit type="number" name="limite_inscritos" id="limiteInscritos" label="Limite de Inscritos"
                                          help="Obrigatório"
                                          validation="required|number" v-model="formData.limite_inscritos" placeholder="Limite de Inscritos" />
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-lg-12 col-md-12">
-                                <FormKit type="text" name="url_inscricao" id="local" label="Link de Inscrição"
-                                         validation="max:150" v-model="formData.url_inscricao" placeholder="Link de Inscrição" />
                             </div>
                         </div>
 
@@ -200,9 +193,8 @@ const formData = ref({
     cidade: '',
     local: '',
     descricao: '',
-    logo_evento: '',
+    logo_evento: null,
     limite_inscritos: '',
-    url_inscricao: '',
     campo_extra: {
         nome: true,
         sobrenome: true,
@@ -228,20 +220,7 @@ onMounted(() => {
             const evento = response.data.data;
             formData.value = {
                 ...formData.value,
-                ...evento,
-                campo_extra: evento.campo_extra || {
-                    nome: true,
-                    sobrenome: true,
-                    telefone: true,
-                    email: true,
-                    cpf: false,
-                    datanascimento: false,
-                    sexo: false,
-                    estado: false,
-                    cidade: false,
-                    endereco: false,
-                    cep: false
-                }
+                ...evento
             };
         })
         .catch(error => {
@@ -273,17 +252,12 @@ function submitForm() {
         descricao: formData.value.descricao,
         logo_evento: formData.value.logo_evento,
         limite_inscritos: formData.value.limite_inscritos,
-        url_inscricao: formData.value.url_inscricao,
         campos_adicionais: formData.value.campos_adicionais,
         campo_extra: formData.value.campo_extra,
     };
 
 
-    axios.put(`evento/update/${formData.value.id}`, update, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        }
-    })
+    axios.put(`evento/update/${formData.value.id}`, update)
         .then(response => {
             Swal.fire({
                 icon: 'success',

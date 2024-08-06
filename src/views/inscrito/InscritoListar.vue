@@ -12,37 +12,36 @@
                     Inscritos: {{ inscritos.length }}
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6 text-end">
+                    <span class="btn btn-outline-info btn-round" @click="exportPDF">
+                        <fa :icon="['fas', 'print']" size="xl" />
+                    </span>
                     <RouterLink :to="{ name: 'InscritoForm', params: { id: $route.params.id } }"><span class="btn btn-primary btn-round">Adicionar Inscrição</span></RouterLink>
                 </div>
             </div>
         </template>
         <template v-slot:body>
-            <div class="table-responsive">
-                <table id="multi-filter-select" class="display table table-striped table-hover">
+            <div class="table-responsive" id="inscritos">
+                <table id="multi-filter-select" class="display table table-bordered table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>Inscrito</th>
-                            <th class="text-center">Ação</th>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Telefone</th>
+                            <th class="text-center coluna-oculta w-15">Ação</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(inscrito, index) in inscritos" :key="index">
                             <td>
                                 <div class="row">
-                                    <div class="col-lg-2 col-md-3 col-6">
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" width="80px" height="80px" alt="avatar" />
-                                    </div>
-
                                     <div class="col-lg-10 col-md-9 col-6">
-                                        <span>{{ inscrito.nome }}</span><br>
-                                        <span><b>CPF:</b> {{ inscrito.cpf }}</span><br>
-                                        <span><b>Telefone:</b> {{ inscrito.telefone }}</span><br>
-                                        <span><b>E-mail:</b> {{ inscrito.email }}</span><br>
+                                        <span v-if="inscrito.nome">{{ inscrito.nome }}</span> <span v-if="inscrito.sobrenome">{{ inscrito.sobrenome }}</span><br>
                                     </div>
                                 </div>
-
                             </td>
-                            <td class="text-center">
+                            <td><span v-if="inscrito.email">{{ inscrito.email }}</span></td>
+                            <td><span v-if="inscrito.telefone">{{ inscrito.telefone }}</span></td>
+                            <td class="text-center coluna-oculta">
                                 <a @click="redirectEdit(inscrito.id)" v-if="inscrito.id">
                                     <fa :icon="['fas', 'fa-edit']" size="xl" />
                                 </a>
@@ -54,7 +53,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <nav aria-label="...">
+                <nav aria-label="..." class="coluna-oculta">
                     <ul class="pagination">
                         <li class="page-item">
                             <a v-if="paginantion.first_page_url" class="page-link" href="#" @click.prevent="redirectPagination(paginantion.first_page_url)">Anterior</a>
@@ -83,6 +82,7 @@ import CardForm from "@/components/CardForm.vue";
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import SectionNavegacao from '@/components/SectionNavegacao.vue';
+import html2pdf from 'html2pdf.js';
 
 const inscritos = ref([]);
 const paginantion = ref([]);
@@ -108,7 +108,6 @@ function redirectPagination(url = '') {
         .catch(error => {
             console.error('Erro ao carregar os inscritos:', error);
         });
-
 }
 const router = useRouter();
 
@@ -139,4 +138,27 @@ function deleteFunction(id) {
 
 }
 
+function exportPDF() {
+
+    const colunaAcoes = document.querySelectorAll('.coluna-oculta');
+
+    // Itera sobre cada elemento e aplica o estilo de ocultação
+    colunaAcoes.forEach(element => {
+        element.style.display = 'none';
+    });
+
+    html2pdf(document.getElementById('inscritos'), {
+        margin: [10, 10, 10, 10],
+        filename: 'inscritos.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { dpi: 192, letterRendering: true },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    });
+}
 </script>
+
+<style>
+.w-15 {
+    width: 15% !important;
+}
+</style>

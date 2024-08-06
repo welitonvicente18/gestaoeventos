@@ -45,7 +45,7 @@
                             </td>
                             <td>
                                 <a @click="redirect(evento.id)">
-                                    <fa :icon="['fas', 'share-square']" size="xl" />
+                                    <span class="btn btn-outline-info btn-round" ><fa :icon="['fas', 'share-square']" size="xl" /></span>
                                 </a>
                             </td>
                         </tr>

@@ -33,33 +33,37 @@
                         </div>
 
                         <div class="row form-group">
-                            <div class="col-lg-4 col-md-4">
+                            <div class="col-lg-4 col-md-4" v-if="permisaoCampo.cpf">
                                 <FormKit type="text" name="cpf" id="cpf" label="CPF" v-mask="'###.###.###-##'"
                                          validation="required" v-model="formData.cpf" placeholder="CPF" />
                             </div>
-                            <div class="col-lg-4 col-md-4">
-                                <FormKit type="text" name="rg" id="rg" label="RG"
-                                         validation="required|max:20" v-model="formData.rg" placeholder="RG" />
-                            </div>
-                            <div class="col-lg-4 col-md-4">
+                            <div class="col-lg-4 col-md-4" v-if="permisaoCampo.datanascimento">
                                 <FormKit type="date" name="data_nascimento" id="data_nascimento" label="Data de Nascimento"
                                          validation="required" v-model="formData.data_nascimento" placeholder="__/__/____" />
+                            </div>
+                            <div class="col-lg-2 col-md-2" v-if="permisaoCampo.sexo">
+                                <FormKit type="select" label="Sexo" name="sexo"
+                                         validation="required" v-model="formData.sexo" :options="[
+                                            { label: '', value: '' },
+                                            { label: 'Masculino', value: 'M' },
+                                            { label: 'Feminino', value: 'F' },
+                                        ]" />
                             </div>
                         </div>
 
                         <div class="row form-group">
-                            <div class="col-lg-3 col-md-2">
-                                <SelectUfForm name="uf" v-model="formData.uf" />
+                            <div class="col-lg-3 col-md-2" v-if="permisaoCampo.estado">
+                                <SelectUfForm name="uf" validation="required" v-model="formData.uf" />
                             </div>
-                            <div class="col-lg-4 col-md-4">
+                            <div class="col-lg-4 col-md-4" v-if="permisaoCampo.cidade">
                                 <FormKit type="text" name="cidade" id="cidade" label="Cidade"
                                          validation="required" v-model="formData.cidade" placeholder="Cidade" />
                             </div>
-                            <div class="col-lg-5 col-md-5">
+                            <div class="col-lg-5 col-md-5" v-if="permisaoCampo.endereco">
                                 <FormKit type="text" name="endereco" id="endereco" label="Endereço"
                                          validation="required" v-model="formData.endereco" placeholder="Endereço" />
                             </div>
-                            <div class="col-lg-3 col-md-3">
+                            <div class="col-lg-3 col-md-3" v-if="permisaoCampo.cep">
                                 <FormKit type="text" name="cep" id="cep" label="CEP" v-mask="'######-###'"
                                          validation="required" v-model="formData.cep" placeholder="CEP" />
                             </div>
@@ -78,18 +82,16 @@
 
 <script setup>
 
-import { ref,onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import CardForm from "@/components/CardForm.vue";
 import SelectUfForm from "@/components/SelectUfForm.vue";
 import Swal from 'sweetalert2';
 import axios from '../../router/services/axiosConfig.js';
 
-const router = useRouter();
-const id_eventos = router.currentRoute.value.params.id;
-
 const formData = ref({
-    id_eventos: id_eventos,
+    id_eventos: '',
+    id: '',
     nome: '',
     sobrenome: '',
     telefone: '',
@@ -100,7 +102,17 @@ const formData = ref({
     uf: '',
     cidade: '',
     endereco: '',
-    cep: ''
+    cep: '',
+});
+
+const permisaoCampo = ref({
+    sexo: false,
+    cep: false,
+    cidade: false,
+    cpf: false,
+    datanascimento: false,
+    endereco: false,
+    estado: false,
 });
 
 
@@ -112,11 +124,10 @@ onMounted(() => {
     axios.get(`evento/show/${id}`)
         .then(response => {
             const evento = response.data.data;
-            formData.value = {
-                ...formData.value,
-                ...evento
+            formData.value.id_eventos = evento.id;
+            permisaoCampo.value = {
+                ...evento.campo_extra
             };
-            console.log(evento);
         })
         .catch(error => {
             console.log('Erro ao buscar detalhes do evento', error);
@@ -129,8 +140,11 @@ onMounted(() => {
 });
 
 function submitForm() {
-
-    axios.post('inscrito/store', formData.value)
+    
+    const insert = {
+       ...formData.value,
+    };
+    axios.post('inscrito/store', insert)
         .then(response => {
             Swal.fire({
                 icon: 'success',

@@ -13,7 +13,7 @@
         </div>
         <div class="col-lg-3 col-md-5 col-12">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header text-center">
                     <h4 class="card-title" v-if="evento">{{ evento.nome_evento }}</h4>
                 </div>
                 <div class="card-body">
@@ -22,8 +22,13 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-12 text-center">
                         <p v-if="evento" class="text-justify mt-2">{{ evento.descricao }}</p>
+                        <div class="input-group mb-3" v-if="evento">
+                            <span>www.eventofacil.com.br/{{ evento.id }}/{{ evento.nome_evento }}</span>
+                            <a v-if="evento" :href="`http://localhost:8080/cadastroexterno/${evento.id}/${eventoNome_evento}`" target="_blank" class="btn btn-primary btn-round">Link</a>
+                        </div>
                     </div>
-                    <div class="clearflix"></div>
+                    <div class=" clearflix">
+                    </div>
                     <br>
                     <ul class="nav nav-pills nav-secondary  nav-pills-no-bd nav-pills-icons justify-content-center" id="pills-tab-with-icon" role="tablist">
                         <li class="nav-item submenu">

@@ -34,33 +34,37 @@
                         </div>
 
                         <div class="row form-group">
-                            <div class="col-lg-4 col-md-4">
+                            <div class="col-lg-4 col-md-4" v-if="permisaoCampo.cpf">
                                 <FormKit type="text" name="cpf" id="cpf" label="CPF" v-mask="'###.###.###-##'"
                                          validation="required" v-model="formData.cpf" placeholder="CPF" />
                             </div>
-                            <div class="col-lg-4 col-md-4">
-                                <FormKit type="text" name="rg" id="rg" label="RG"
-                                         validation="required|max:20" v-model="formData.rg" placeholder="RG" />
-                            </div>
-                            <div class="col-lg-4 col-md-4">
+                            <div class="col-lg-4 col-md-4" v-if="permisaoCampo.datanascimento">
                                 <FormKit type="date" name="data_nascimento" id="data_nascimento" label="Data de Nascimento"
                                          validation="required" v-model="formData.data_nascimento" placeholder="__/__/____" />
+                            </div>
+                            <div class="col-lg-2 col-md-2" v-if="permisaoCampo.sexo">
+                                <FormKit type="select" label="Sexo" name="sexo"
+                                         validation="required" v-model="formData.sexo" :options="[
+                                            { label: '', value: '' },
+                                            { label: 'Masculino', value: 'M' },
+                                            { label: 'Feminino', value: 'F' },
+                                        ]" />
                             </div>
                         </div>
 
                         <div class="row form-group">
-                            <div class="col-lg-3 col-md-2">
-                                <SelectUfForm name="uf" v-model="formData.uf" />
+                            <div class="col-lg-3 col-md-2" v-if="permisaoCampo.estado">
+                                <SelectUfForm name="uf" validation="required" v-model="formData.uf" />
                             </div>
-                            <div class="col-lg-4 col-md-4">
+                            <div class="col-lg-4 col-md-4" v-if="permisaoCampo.cidade">
                                 <FormKit type="text" name="cidade" id="cidade" label="Cidade"
                                          validation="required" v-model="formData.cidade" placeholder="Cidade" />
                             </div>
-                            <div class="col-lg-5 col-md-5">
+                            <div class="col-lg-5 col-md-5" v-if="permisaoCampo.endereco">
                                 <FormKit type="text" name="endereco" id="endereco" label="Endereço"
                                          validation="required" v-model="formData.endereco" placeholder="Endereço" />
                             </div>
-                            <div class="col-lg-3 col-md-3">
+                            <div class="col-lg-3 col-md-3" v-if="permisaoCampo.cep">
                                 <FormKit type="text" name="cep" id="cep" label="CEP" v-mask="'######-###'"
                                          validation="required" v-model="formData.cep" placeholder="CEP" />
                             </div>
@@ -102,13 +106,22 @@ const formData = ref({
     cep: '',
 });
 
+const permisaoCampo = ref({
+    sexo: false,
+    cep: false,
+    cidade: false,
+    cpf: false,
+    datanascimento: false,
+    endereco: false,
+    estado: false,
+});
+
 onMounted(() => {
 
     const router = useRouter();
     const id = router.currentRoute.value.params.id;
 
     axios.get(`inscrito/show/${id}`)
-
         .then(response => {
             const inscritos = response.data.data;
             formData.value = {
@@ -131,7 +144,9 @@ function submitForm() {
 
     const update = {
         id: formData.value.id,
+        id_eventos: formData.value.id_eventos,
         nome: formData.value.nome,
+        sobrenome: formData.value.sobrenome,
         cpf: formData.value.cpf,
         rg: formData.value.rg,
         data_nascimento: formData.value.data_nascimento,
@@ -142,7 +157,7 @@ function submitForm() {
         endereco: formData.value.endereco,
         cep: formData.value.cep,
     };
-    
+
     axios.put(`inscrito/update/${formData.value.id}`, update)
         .then(response => {
             Swal.fire({

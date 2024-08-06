@@ -28,13 +28,9 @@
             <div class="sidebar-content">
                 <ul class="nav nav-secondary">
                     <li class="nav-item active">
-                        <a data-bs-toggle="collapse"
-                           href="#dashboard"
-                           class="collapsed"
-                           aria-expanded="false">
-                            <fa :icon="['fas', 'house']" />
-                            <p>&nbsp;Dashboard</p>
-                        </a>
+                        <router-link :to="{ name: 'dashboard' }">
+                            <fa :icon="['fas', 'house']" />&nbsp;Dashboard
+                        </router-link>
                     </li>
                     <li class="nav-section">
                         <span class="sidebar-mini-icon">

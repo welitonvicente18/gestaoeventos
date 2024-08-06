@@ -105,13 +105,6 @@
 
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12">
-                                <FormKit type="text" name="url_inscricao" id="local" label="Link de Inscrição"
-                                         validation="max:150" v-model="formData.url_inscricao" placeholder="Link de Inscrição" />
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-lg-12 col-md-12">
                                 <b>Habilitar campos da Inscrição</b>
                             </div>
                             <hr>
@@ -198,7 +191,6 @@ const formData = ref({
     descricao: '',
     logo_evento: null,
     limite_inscritos: '',
-    url_inscricao: '',
     campo_extra: {
         nome: true,
         sobrenome: true,

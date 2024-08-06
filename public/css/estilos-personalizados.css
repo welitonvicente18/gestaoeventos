@@ -1,3 +1,12 @@
 :root {
     --fk-max-width-input: 100%;
 }
+
+.formkit-outer {
+    --fk-margin-outer: 0px;
+}
+
+.formkit-label {
+    --fk-margin-label: 0px;
+    /* --fk-padding-label: px; */
+}
